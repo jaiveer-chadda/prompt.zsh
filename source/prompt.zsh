@@ -45,6 +45,7 @@ function prompt::main() {
     '85'   #  8 : ( 129, 255, 195 )
 
     '189'  #  9 : ( 224, 231, 255 )
+    '183'  # 10 : ( 203, 166, 247 )
   )
 
   local -ri 10 black=-1
@@ -192,7 +193,7 @@ function prompt::return_code() {
 
   if (( ! do_pipes )) local -a ret_codes=( "${ret_codes[-1]:-0}" )
 
-  local -ri 10 noerr=8 error=0 signl=1 cancl=6 range=4 pnmax=9
+  local -ri 10 noerr=8 error=0 signl=1 cancl=6 range=4 pnmax=9 spipe=10
   local -ri 10 pmax=2147483647 nmax=-2147483648
   local -i  10 colour
   local -i  2  is_first_arrow=1
@@ -208,7 +209,7 @@ function prompt::return_code() {
       (   127  ) colour=$error; msg='?'                  ;; #r)127
       (   128  ) colour=$error; msg='#?'                 ;; #r)128
       (   130  ) colour=$cancl                           ;; #i)130  SIGINT
-      (   141  ) colour=$cancl; msg='|'                  ;; #i)141  SIGPIPE
+      (   141  ) colour=$spipe                           ;; #v)141  SIGPIPE
       (   146  ) colour=$signl                           ;; #o)146  SIGTSTP
       ( <-161> ) colour=$signl; msg="$signals[code-127]" ;; #o)129 ~> 161
       ( <-255> ) colour=$signl; msg="$code"              ;; #o)162 -> 255
@@ -435,5 +436,5 @@ prompt::set all
 
 # ───────────────────────────── ── ── END ── ── ───────────────────────────── #
 
-# spell:ignore behnd cancl mard modif noerr signl stged untrk ense anch
+# spell:ignore behnd cancl mard modif noerr signl stged untrk ense anch spipe
 # spell:ignoreRegExp /\bd(elet|flt)\b|\b[np]{1,2}max\b/g
