@@ -11,9 +11,11 @@ export _PROMPT_OPTS_FILE="${__pwd__:h}/context/config"
 
 # ——————————————————————————————————————————————————————————————————————————— #
 
+source "$__pwd__/settings/settings.zsh"
+
 source "$__pwd__/features/git.zsh"
 source "$__pwd__/features/return-code.zsh"
-source "$__pwd__/settings/settings.zsh"
+source "$__pwd__/features/jobs.zsh"
 
 source "$__pwd__/main/default-prompt.zsh"
 

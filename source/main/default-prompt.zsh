@@ -132,6 +132,10 @@ function prompt::main() {
     prev_bg="$curr_bg"
   }
 
+  # —— jobs() ——————————————————————————————————————————————————————— #
+
+  prompt::jobs
+
   # —— git_extension() —————————————————————————————————————————————— #
 
   # Now get the git segment (if it exists)
