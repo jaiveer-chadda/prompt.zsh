@@ -93,8 +93,8 @@ function prompt::main() {
   #  If we're not, then we can tell bc the 1st elem of path_arr will be empty
   if [[ -z "$path_arr[1]" ]] path_arr=( '/' "${(@)path_arr:#}" )
   # But if it isn't empty, then:
-  #  =( '/'             ) : add the leading `/` back
-  #  =(          ...:#} ) : remove any empty elements from the array
+  #  =( '/'       ) : add the leading `/` back
+  #  =(    ...:#} ) : remove any empty elements from the array
 
   local -ri 10 path_length=$#path_arr
 
@@ -156,8 +156,9 @@ function prompt::main() {
   # —— Cleanup —————————————————————————————————————————————————————— #
 
   trap - INT TERM QUIT
-  # Finally, print a final reset sequence, and a traling space, then export it
-  export {PS1,PROMPT,prompt}="$PS1%k%f%u%s%b "
+  # Finally, print a final reset sequence and a traling space, then export it
+  #  Note: `%b` evaluates to `\e[0m`, so it's the only one needed here
+  export {PS1,PROMPT,prompt}="$PS1%b "
 }
 
 # —— prompt::colour() ——————————————————————————————————————————————————————— #

@@ -84,8 +84,8 @@ function prompt() {
       } ;;
 
     ( * ) prompt::main ;|
-    ( % | raw | -[er] ) echo -nE - "${(%)PS1}" ;;
-    (   | do  | show  ) echo -E  - "$PS1"      ;;
+    ( % | -r | raw  ) echo -nE - "${(%)PS1}" ;;
+    (   | do | show ) echo -E  - "$PS1"      ;;
 
     ( * ) return 1 ;;
   }
