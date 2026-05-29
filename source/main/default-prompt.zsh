@@ -160,7 +160,7 @@ function prompt::main() {
   trap - INT TERM QUIT
   # Finally, print a final reset sequence and a traling space, then export it
   #  Note: `%b` evaluates to `\e[0m`, so it's the only one needed here
-  export {PS1,PROMPT,prompt}="$PS1%b "
+  export {PS1,PROMPT,prompt}="$PS1%k%f%u%s%b "
 }
 
 # —— prompt::colour() ——————————————————————————————————————————————————————— #
