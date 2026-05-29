@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 function prompt::jobs() {
-  if ! (( $#jobstates )) return 0
+  if ! (( $#jobstates && do_jobs )) return 0
 
   local -ri 10 job_count=$#jobstates
   local -ri 10 job_colour=10

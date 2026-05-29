@@ -76,6 +76,13 @@ function prompt() {
         (   *   ) return 1               ;;
       } ;;
 
+    ( jobs )
+      case "$2" {
+        ( $~pos ) prompt::set jobs 1 ;;
+        ( $~neg ) prompt::set jobs 0 ;;
+        (   *   ) return 1           ;;
+      } ;;
+
     ( * ) prompt::main ;|
     ( % | raw | -[er] ) echo -nE - "${(%)PS1}" ;;
     (   | do  | show  ) echo -E  - "$PS1"      ;;

@@ -59,6 +59,7 @@ function prompt::main() {
 
     do_git_branch=${_PROMPT_OPTS[git-branch]}
     do_condense=${_PROMPT_OPTS[condense]}
+    do_jobs=${_PROMPT_OPTS[jobs]}
     do_git=${_PROMPT_OPTS[git]}
   }
 
