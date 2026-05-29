@@ -83,6 +83,13 @@ function prompt() {
         (   *   ) return 1           ;;
       } ;;
 
+    ( shlvl )
+      case "$2" {
+        ( $~pos ) prompt::set shlvl 1 ;;
+        ( $~neg ) prompt::set shlvl 0 ;;
+        (   *   ) return 1            ;;
+      } ;;
+
     ( * ) prompt::main ;|
     ( % | -r | raw  ) echo -nE - "${(%)PS1}" ;;
     (   | do | show ) echo -E  - "$PS1"      ;;

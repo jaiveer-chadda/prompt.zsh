@@ -59,6 +59,7 @@ function prompt::main() {
 
     do_git_branch=${_PROMPT_OPTS[git-branch]}
     do_condense=${_PROMPT_OPTS[condense]}
+    do_shlvl=${_PROMPT_OPTS[shlvl]}
     do_jobs=${_PROMPT_OPTS[jobs]}
     do_git=${_PROMPT_OPTS[git]}
   }
@@ -98,8 +99,9 @@ function prompt::main() {
 
   local -ri 10 path_length=$#path_arr
 
-  # —— return_code() ———————————————————————————————————————————————— #
+  # —— shlvl() & return_code() —————————————————————————————————————— #
 
+  prompt::shlvl
   prompt::return_code
 
   # —— Loop & Colour Paths —————————————————————————————————————————— #
