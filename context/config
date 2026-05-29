@@ -1,9 +1,0 @@
-typeset -g -A _PROMPT_OPTS=(
-  [condense]=0
-  [git]=1
-  [git-branch]=0
-  [override]=0
-  [pipes]=1
-  [short]=1
-  [verbose]=1
-)
