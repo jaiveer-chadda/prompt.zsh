@@ -6,7 +6,7 @@ function prompt::main() {
 
   local -a ret_codes=( "${(@)pipestatus:-$?}" )
 
-  setopt local_options local_traps warn_create_global warn_nested_var
+  setopt local_options local_traps warn_create_global
 
   # make sure that the prompt doesn't leak colours anywhere
   trap "PS1+='%k%f%u%s%b%(!:#:$) '" INT TERM QUIT
