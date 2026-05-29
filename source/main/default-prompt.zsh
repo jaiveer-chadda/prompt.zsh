@@ -1,28 +1,9 @@
 #!/usr/bin/env zsh
 
-# ——————————————————————————————————————————————————————————————————————————— #
-# ── ── Environment ── ────────────────────────────────────────────────────── #
-# ——————————————————————————————————————————————————————————————————————————— #
-
-source "${0:h}/features/git.zsh"
-source "${0:h}/features/return-code.zsh"
-source "${0:h}/settings/settings.zsh"
-
-precmd_functions+=( prompt::main )
-typeset -xa precmd_functions=( "${(@u)precmd_functions}" )
-
-export _PROMPT_OPTS_FILE="$CONTEXT_FLAGS/prompt"
-
-function prompt::colour() {
-  if (( $1 == -1 )) { PS1+='%B%F{#11111E}'; } else { PS1+="%$colours[$1+1]F"; }
-  if (( $2 == -1 )) { PS1+='%k'           ; } else { PS1+="%$colours[$2+1]K"; }
-}
-
-# ——————————————————————————————————————————————————————————————————————————— #
-# ── ── Main Function ── ──────────────────────────────────────────────────── #
-# ——————————————————————————————————————————————————————————————————————————— #
-
 function prompt::main() {
+
+  # —— General Setup ———————————————————————————————————————————————— #
+
   local -a ret_codes=( "${(@)pipestatus:-$?}" )
 
   setopt local_options local_traps warn_create_global warn_nested_var
@@ -174,11 +155,9 @@ function prompt::main() {
   export {PS1,PROMPT,prompt}="$PS1%k%f%u%s%b "
 }
 
-# ——————————————————————————————————————————————————————————————————————————— #
-# —— —— Initialise Settings —— —————————————————————————————————————————————— #
-# ——————————————————————————————————————————————————————————————————————————— #
+# —— prompt::colour() ——————————————————————————————————————————————————————— #
 
-prompt % &>/dev/null
-prompt::set all
-
-# ───────────────────────────── ── ── END ── ── ───────────────────────────── #
+function prompt::colour() {
+  if (( $1 == -1 )) { PS1+='%B%F{#11111E}'; } else { PS1+="%$colours[$1+1]F"; }
+  if (( $2 == -1 )) { PS1+='%k'           ; } else { PS1+="%$colours[$2+1]K"; }
+}
