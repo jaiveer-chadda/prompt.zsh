@@ -1,39 +1,28 @@
 #!/usr/bin/env zsh
 
-typeset __pwd__="${0:a:h}"
+function prompt::init () {
 
-# ——————————————————————————————————————————————————————————————————————————— #
+  local -r source_dir="${${(%):-%x}:a:h}"
+  export _PROMPT_OPTS_FILE="${source_dir:h}/context/config"
 
-autoload -Uz add-zsh-hook
+  local file; for file in "$source_dir"/*/**/*.zsh; source "$file"
 
-# make sure that the `iterm2_precmd` function always comes after `prompt::main`
-add-zsh-hook -d precmd prompt::main
-add-zsh-hook -d precmd iterm2_precmd
+  # ———————————————————————————————————————————————————————————————————————— #
 
-add-zsh-hook    precmd prompt::main
-add-zsh-hook    precmd iterm2_precmd
+  autoload -Uz add-zsh-hook
 
-# ——————————————————————————————————————————————————————————————————————————— #
+  # make sure that `iterm2_precmd` always comes after `prompt::main`
+  add-zsh-hook -d precmd prompt::main
+  add-zsh-hook -d precmd iterm2_precmd
 
-export _PROMPT_OPTS_FILE="${__pwd__:h}/context/config"
+  add-zsh-hook    precmd prompt::main
+  add-zsh-hook    precmd iterm2_precmd
 
-# ——————————————————————————————————————————————————————————————————————————— #
+  # ———————————————————————————————————————————————————————————————————————— #
 
-source "$__pwd__/settings/settings.zsh"
+  prompt % &>/dev/null
+  prompt::set all
 
-source "$__pwd__/features/git.zsh"
-source "$__pwd__/features/return-code.zsh"
-source "$__pwd__/features/jobs.zsh"
-source "$__pwd__/features/shlvl.zsh"
+} # ———————————————————————————————————————————————————————————————————————— #
 
-source "$__pwd__/main/default-prompt.zsh"
-source "$__pwd__/main/main.zsh"
-
-# ——————————————————————————————————————————————————————————————————————————— #
-
-prompt % &>/dev/null
-prompt::set all
-
-# ——————————————————————————————————————————————————————————————————————————— #
-
-unset __pwd__ &>/dev/null
+prompt::init "$@"
