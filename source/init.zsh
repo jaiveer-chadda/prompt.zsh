@@ -4,8 +4,16 @@ typeset __pwd__="${0:a:h}"
 
 # ——————————————————————————————————————————————————————————————————————————— #
 
-precmd_functions+=( prompt::main )
-typeset -xa precmd_functions=( "${(@u)precmd_functions}" )
+autoload -Uz add-zsh-hook
+
+# make sure that the `iterm2_precmd` function always comes after `prompt::main`
+add-zsh-hook -d precmd prompt::main
+add-zsh-hook -d precmd iterm2_precmd
+
+add-zsh-hook    precmd prompt::main
+add-zsh-hook    precmd iterm2_precmd
+
+# ——————————————————————————————————————————————————————————————————————————— #
 
 export _PROMPT_OPTS_FILE="${__pwd__:h}/context/config"
 
