@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-function prompt::main() {
+function prompt::default() {
 
   # —— General Setup ———————————————————————————————————————————————— #
 

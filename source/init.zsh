@@ -27,6 +27,7 @@ source "$__pwd__/features/jobs.zsh"
 source "$__pwd__/features/shlvl.zsh"
 
 source "$__pwd__/main/default-prompt.zsh"
+source "$__pwd__/main/main.zsh"
 
 # ——————————————————————————————————————————————————————————————————————————— #
 

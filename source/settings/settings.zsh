@@ -2,13 +2,22 @@
 
 function prompt::set prompt::unset () {
   local -r mode="${0##*::}"
-  if [[ "$mode $1" == 'set all' ]] { source "$_PROMPT_OPTS_FILE"; return; }
+
+  if [[ "$mode $1" == 'set all' ]] {
+    source "$_PROMPT_OPTS_FILE"
+    return $?
+  }
 
   if [[ "$mode" == unset ]] {
     unset "_PROMPT_OPTS[$1]" &>/dev/null
-  } else {
+
+  # mode == set
+  } elif [[ $2 == (0|1) ]] {
     _PROMPT_OPTS[$1]=$(( invert ? ! $2 : $2 ))
+  } else {
+    _PROMPT_OPTS[$1]=$2
   }
+
   typeset -p 1 _PROMPT_OPTS > "$_PROMPT_OPTS_FILE"
 }
 
@@ -24,6 +33,16 @@ function prompt() {
       echoAA _PROMPT_OPTS 2>/dev/null || typeset -p 1 _PROMPT_OPTS ;;
 
     ( refresh ) prompt::set all ;;
+
+    ( mode )
+      case "$2" {
+        ( def* ) prompt::set mode default ;;
+        ( tiny ) prompt::set mode tiny    ;;
+        ( bash ) prompt::set mode bash    ;;
+        ( dark ) prompt::set mode dark    ;;
+        (  ''  ) echo $_PROMPT_OPTS[mode] ;;
+        (  *   ) return 1                 ;;
+      } ;;
 
     ( debug | override )
       case "$2" {
