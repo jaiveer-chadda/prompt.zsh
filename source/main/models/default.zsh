@@ -4,8 +4,6 @@ function prompt::default() {
 
   # —— General Setup ———————————————————————————————————————————————— #
 
-  local -a ret_codes=( "${(@)pipestatus:-$?}" )
-
   setopt local_options local_traps warn_create_global
 
   # make sure that the prompt doesn't leak colours anywhere
