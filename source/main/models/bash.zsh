@@ -1,14 +1,18 @@
 #!/usr/bin/env zsh
 
 function prompt::bash() {
+  local -i 10 ret_code=$?
+
   local -r  formatted_path="${PWD/#$HOME/~}"
-  local -ra path_array=( "${(s:/:)formatted_path}" )
+  local -ra path_array=( "${(@s:/:)formatted_path}" )
   local -ra colours=( 1 3 2 6 4 5 )
 
   local -i 10 i colour_num
   local colour_esc output
 
   export PS1=
+
+  if (( ret_code )) PS1+="%1F[ $ret_code ] "
 
   for i in {1..$#path_array}; {
     colour_num=$(( colours[ ( ( i - 1 ) % $#colours ) + 1 ] + 8 ))
