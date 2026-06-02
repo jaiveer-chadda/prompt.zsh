@@ -1,21 +1,21 @@
 #!/usr/bin/env zsh
 
 function prompt::bash() {
+  local -r dim=$'%{\e[2m%}'
+
   local -r  formatted_path="${PWD/#$HOME/~}"
   local -ra path_array=( "${(@s:/:)formatted_path}" )
   local -ra colours=( 1 3 2 6 4 5 )
-
-  local -i 10 i colour_num
-  local colour_esc output
 
   export PS1=
 
   if (( ret_codes[-1] )) PS1+="%1F[ $ret_codes[-1] ] "
 
+  local -i 10 i colour_num
   for i in {1..$#path_array}; {
     colour_num=$(( colours[ ( ( i - 1 ) % $#colours ) + 1 ] + 8 ))
     PS1+="%${colour_num}F$path_array[i]"
-    if (( i != $#path_array )) PS1+=$'%{\e[2m%}/%{\e[22m%}'
+    if (( i != $#path_array )) PS1+="$dim/%b"
   }
 
   PS1+=' %105F$%f '
