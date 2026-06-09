@@ -28,4 +28,6 @@ function prompt::path() {
     # set the current bg to the previous one
     prev_bg="$curr_bg"
   }
+
+  prompt::colour $prev_bg $black; PS1+="$arrow"
 }

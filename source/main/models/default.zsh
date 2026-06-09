@@ -6,8 +6,8 @@ function prompt::default() {
 
   setopt local_options local_traps warn_create_global
 
-  # make sure that the prompt doesn't leak colours anywhere
-  trap "PS1+='%k%f%u%s%b%(!:#:$) '" INT TERM QUIT
+  # make sure that there's a reasonable prompt, even if there's an error
+  trap "PS1='%b%(!:#:$) '" INT TERM QUIT
 
   export {PS1,PROMPT,prompt}='%b'
 
@@ -96,6 +96,7 @@ function prompt::default() {
   #  =(    ...:#} ) : remove any empty elements from the array
 
   local -ri 10 path_length=$#path_arr
+  local -i 10 i {curr_,prev_}bg=$black
 
   # —— shlvl() & return_code() —————————————————————————————————————— #
 
@@ -104,7 +105,6 @@ function prompt::default() {
 
   # —— Loop & Colour Paths —————————————————————————————————————————— #
 
-  local -i 10 i {curr_,prev_}bg=$black
   prompt::path
 
   # —— jobs() ——————————————————————————————————————————————————————— #
@@ -113,19 +113,7 @@ function prompt::default() {
 
   # —— git_extension() —————————————————————————————————————————————— #
 
-  # Now get the git segment (if it exists)
-  # IF in a git repo, AND not in the `.git` dir (if `.git` isn't in `$PWD`)
-  #  then run the git extension
-  if git rev-parse --is-inside-work-tree &>/dev/null \
-    && (( do_git && ! path_arr[(Ie).git] )) {
-    prompt::git_extension
-
-  } else {
-    # otherwise just colour the last arrow
-    prompt::colour $prev_bg $black
-  }
-
-  PS1+="$arrow"
+  prompt::git_extension
 
   # —— Cleanup —————————————————————————————————————————————————————— #
 

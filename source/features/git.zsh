@@ -2,6 +2,13 @@
 
 function prompt::git_extension() {
 
+  # Quit the git extension if:
+  #  - not in a git repo, or
+  #  - in the `.git` dir (if `.git` is in `$PWD`)
+  #  - its been disabled in settings
+  if ! git rev-parse --is-inside-work-tree &>/dev/null \
+    || (( ! do_git || path_arr[(Ie).git] )) return 0
+
   # —— Const & Var Setup ———————————————————————————————————————————— #
 
   local -ri 10 black=-1 git_sep=-1        #¬( 17,  17,  30) ( 17,  17,  30)
@@ -19,10 +26,6 @@ function prompt::git_extension() {
   states=(  ahead     behnd     stged     modif     delet     untrk     )
   icons=(  [ahead]=↑ [behnd]=↓ [stged]=+ [modif]=𝚫 [delet]=× [untrk]=\? )
   counts=( [ahead]=0 [behnd]=0 [stged]=0 [modif]=0 [delet]=0 [untrk]=0  )
-
-  # ————————————————————————————————————————————————————————————————— #
-
-  prompt::colour $prev_bg $git_sep; PS1+="$arrow"
 
   # —— Get States' Counts ——————————————————————————————————————————— #
 
@@ -85,7 +88,7 @@ function prompt::git_extension() {
   }
 
   PS1+=' '
-  prompt::colour $bg_colour $black
+  prompt::colour $bg_colour $black; PS1+="$arrow"
 }
 
 # spell:ignore untrk modif stged behnd delet mard
