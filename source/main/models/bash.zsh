@@ -9,16 +9,19 @@ function prompt::bash() {
 
   export PS1=
 
-  if (( ret_codes[-1] )) PS1+="%1F[ $ret_codes[-1] ] "
+  local -ri 10 ret_code=$ret_codes[-1]
+  local -ri 10 dollar_colour=$(( ret_code == 0 ? 105 : 1 ))
+  if (( ret_code != 0 && ret_code != 1 )) PS1+="%1F[$ret_code] "
 
   local -i 10 i colour_num
   for i in {1..$#path_array}; {
     colour_num=$(( colours[ ( ( i - 1 ) % $#colours ) + 1 ] + 8 ))
-    PS1+="%${colour_num}F$path_array[i]"
+
+    PS1+="%${colour_num}F${path_array[i]//://}"
     if (( i != $#path_array )) PS1+="$dim/%b"
   }
 
-  PS1+=' %105F$%f '
+  PS1+=" %${dollar_colour}F$%f "
 }
 
 # function _set_ps1 () {
