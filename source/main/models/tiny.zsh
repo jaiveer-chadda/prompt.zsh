@@ -1,8 +1,6 @@
 #!/usr/bin/env zsh
 
 function prompt::tiny() {
-  export PS1=''
-
   # if `$? == 0/1`, don't do anything. otherwise, dispay the error code in red
   PS1+='%(?::%1(?::%1F%?%f ))'
 

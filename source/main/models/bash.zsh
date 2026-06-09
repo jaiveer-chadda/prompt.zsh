@@ -7,8 +7,6 @@ function prompt::bash() {
   local -ra path_array=( "${(@s:/:)formatted_path}" )
   local -ra colours=( 1 3 2 6 4 5 )
 
-  export PS1=
-
   local -ri 10 ret_code=$ret_codes[-1]
   local -ri 10 dollar_colour=$(( ret_code == 0 ? 105 : 1 ))
   if (( ret_code != 0 && ret_code != 1 )) PS1+="%1F[$ret_code] "
