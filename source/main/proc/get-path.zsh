@@ -12,8 +12,9 @@ function prompt::get_path () {
     'zsh'            ''  # \uf489
   )
 
-  path_arr=( / )
-  if [[ "$PWD" != '/' ]] path_arr=( "${(@s:/:)PWD/#$HOME/~}" )
+  path_arr=( "${(@s:/:)PWD/#$HOME/~}" )
+  if [[ -z "$path_arr[1]" ]] path_arr[1]='/'  # if we're not in `~/**`
+  path_arr=( "${(@)path_arr:#}" )  # remove all empty elements
 
   # —— Get & Format $PWD ———————————————————————————————————————————— #
 
