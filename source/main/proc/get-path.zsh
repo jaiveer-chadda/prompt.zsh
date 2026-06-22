@@ -3,8 +3,8 @@
 function prompt::get_path () {
   local -rA dir_icons=(
     'Desktop'        ''  # \uf4a9
-    'Documents'      ''  # \uf016
-    'Downloads'      ''  # \uf409
+    'Documents'      ''  # \uf016
+    'Downloads'      ''  # \uf409
     'CS'             ' ' # \uf121
     'y_settings_etc' ''  # \uf013
     '.config'       '.'  # \uf013
