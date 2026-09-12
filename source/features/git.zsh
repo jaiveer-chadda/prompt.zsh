@@ -54,13 +54,13 @@ function prompt::git_extension() {
 
   # —— Format Output ———————————————————————————————————————————————— #
 
-  local -ri 10  local_ch=$(( counts[modif] + counts[delet] + counts[untrk] ))
-  local -ri 10 remote_ch=$(( counts[ahead] + counts[behnd] + counts[stged] ))
-  local -ri 10 bg_colour=$((
-    remote_ch ? ( local_ch ? tree_dirty : remote_clean ) : tree_clean
-  ))
-
+  local -ri 10    local_ch=$(( counts[modif] + counts[delet] + counts[untrk] ))
+  local -ri 10   remote_ch=$(( counts[ahead] + counts[behnd] + counts[stged] ))
   local -ri 2 do_separator=$(( remote_ch && local_ch ))
+
+  local -i 10 bg_colour=$tree_clean
+  if (( remote_ch )) bg_colour=$remote_clean
+  if (( local_ch  )) bg_colour=$tree_dirty
 
   prompt::colour $git_sep $bg_colour; PS1+="$arrow "
   prompt::colour $black   $bg_colour
