@@ -1,13 +1,12 @@
 #!/usr/bin/env zsh
 
 function prompt::git_extension() {
+  local grvp_output='false'
+  grvp_output="$( git rev-parse --is-inside-work-tree 2>/dev/null )"
 
-  # Quit the git extension if:
-  #  - not in a git repo, or
-  #  - in the `.git` dir (if `.git` is in `$PWD`)
-  #  - its been disabled in settings
-  if ! git rev-parse --is-inside-work-tree &>/dev/null \
-    || (( ! do_git || path_arr[(Ie).git] )) return 0
+  # quit the git extension if we're not in a git repo,
+  #  or git has been disabled in settings
+  if (( $? || !do_git )) || [[ "$grvp_output" == 'false' ]] return 0
 
   # —— Const & Var Setup ———————————————————————————————————————————— #
 
@@ -91,4 +90,4 @@ function prompt::git_extension() {
   prompt::colour $bg_colour $black; PS1+="$arrow"
 }
 
-# spell:ignore untrk modif stged behnd delet mard
+# spell:ignore untrk modif stged behnd delet mard grvp
