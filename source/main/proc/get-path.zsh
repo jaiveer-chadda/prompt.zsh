@@ -1,5 +1,13 @@
 #!/usr/bin/env zsh
 
+#############################################
+# prompt::get_path                          #
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾                          #
+# Parses `$PWD`, converts it into an array, #
+#  and makes any necessary substitutions    #
+#                                           #
+# Globals: sets `path_arr`                  #
+#############################################
 function prompt::get_path () {
   local -rA dir_icons=(
     # General                 # Desktop
@@ -55,7 +63,23 @@ function prompt::get_path () {
     'public'        '󰛍'
   )
 
-  path_arr=( "${(@s:/:)PWD/#$HOME/~}" )
+  # split $PWD at every slash
+  path_arr=( "${(@s:/:)PWD}" )
+
+  # TODO: make this work for home dirs that aren't subdirs of `/Users`
+
+  # if we're in a subdir of `/Users/$USER`, replace it with `~`
+  if [[ "$PWD" == "$HOME"* ]] {
+    shift 2 path_arr
+    path_arr[1]='~'
+
+  # if we're in the home folder of another user (i.e. any subdir of `/Users`
+  #  that isn't `/Users/Shared`), then replace it with `~$USER`
+  } elif [[ "$PWD" == '/Users/'(^Shared) ]] {
+    shift 2 path_arr
+    path_arr[1]="~${PWD:t}"
+  }
+
   if [[ -z "$path_arr[1]" ]] path_arr[1]='/'  # if we're not in `~/**`
   path_arr=( "${(@)path_arr:#}" )  # remove all empty elements
 
