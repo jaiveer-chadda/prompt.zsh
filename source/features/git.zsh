@@ -8,6 +8,12 @@ function prompt::git_extension() {
   #  or git has been disabled in settings
   if (( $? || !do_git )) || [[ "$grvp_output" == 'false' ]] return 0
 
+  # if it takes too long, then some of the git files are likely offloaded,
+  #  so don't bother trying to read them
+  local git_status
+  git_status=$'\n'"$( timeout .1 git status --porcelain )"
+  if (( $? )) return 0
+
   # —— Const & Var Setup ———————————————————————————————————————————— #
 
   local -ri 10 black=-1 git_sep=-1        #¬( 17,  17,  30) ( 17,  17,  30)
@@ -30,7 +36,6 @@ function prompt::git_extension() {
   # —— Get States' Counts ——————————————————————————————————————————— #
 
   local -r NL=$'\n' HT=$'\t'
-  local -r git_status="$NL$( git status --porcelain )"
   local -ri 10 status_len=$#git_status
 
   # count how many lines of `$git_status` start with the pattern after `$NL`
