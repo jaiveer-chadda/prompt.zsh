@@ -12,6 +12,7 @@ function prompt::git_extension() {
 
   local -ri 10 black=-1 git_sep=-1        #¬( 17,  17,  30) ( 17,  17,  30)
   local -ri 10 tree_clean=8 tree_dirty=0  # (129, 255, 195), (255, 126, 160)
+  local -ri 10 remote_clean=2             # (249, 226, 175)
 
   local -r dflt_branch_icon=''  # \ue725
   local -r main_branch_icon='𝛍'  # \U1d6cd
@@ -48,14 +49,13 @@ function prompt::git_extension() {
 
   # —— Format Output ———————————————————————————————————————————————— #
 
-  local -i 10 remote_changes local_changes
-  remote_changes=$(( counts[ahead] + counts[behnd] + counts[stged] ))
-  local_changes=$((  counts[modif] + counts[delet] + counts[untrk] ))
+  local -ri 10  local_ch=$(( counts[modif] + counts[delet] + counts[untrk] ))
+  local -ri 10 remote_ch=$(( counts[ahead] + counts[behnd] + counts[stged] ))
+  local -ri 10 bg_colour=$((
+    remote_ch ? ( local_ch ? tree_dirty : remote_clean ) : tree_clean
+  ))
 
-  local -ri 10 any_changes=$(( remote_changes +  local_changes ))
-  local -ri 2 do_separator=$(( remote_changes && local_changes ))
-
-  local -ri 10 bg_colour=$(( any_changes ? tree_dirty : tree_clean ))
+  local -ri 2 do_separator=$(( remote_ch && local_ch ))
 
   prompt::colour $git_sep $bg_colour; PS1+="$arrow "
   prompt::colour $black   $bg_colour
@@ -75,7 +75,7 @@ function prompt::git_extension() {
     PS1+="$dflt_branch_icon $branch_name"
     # if the full branch name is being shown, and there are still more changes
     #  to be added, then add a separator
-    if (( any_changes )) PS1+="$separator"
+    if (( remote_ch || local_ch )) PS1+="$separator"
   }
 
   # get each state and add its count and icon to the end of the prompt
