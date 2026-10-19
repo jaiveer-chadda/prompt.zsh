@@ -1,8 +1,12 @@
 #!/usr/bin/env zsh
 
 function prompt::git_extension() {
+  # the `--no-optional-locks` option prevents git from creating temporary files
+  #  when geeting info, and therefore prevents the [amc] times from changing
+  local -ra GIT=( git --no-optional-locks )
+
   local grvp_output='false'
-  grvp_output="$( git rev-parse --is-inside-work-tree 2>/dev/null )"
+  grvp_output="$( $GIT rev-parse --is-inside-work-tree 2>/dev/null )"
 
   # quit the git extension if we're not in a git repo,
   #  or git has been disabled in settings
@@ -11,7 +15,7 @@ function prompt::git_extension() {
   # if it takes too long, then some of the git files are likely offloaded,
   #  so don't bother trying to read them
   local git_status
-  git_status=$'\n'"$( timeout .1 git status --porcelain )"
+  git_status=$'\n'"$( timeout .1 $GIT status --porcelain )"
   if (( $? )) return 0
 
   # —— Const & Var Setup ———————————————————————————————————————————— #
@@ -47,7 +51,7 @@ function prompt::git_extension() {
   # find how many commits ahead/behind of the remote we are
   #  if the repo doesn't have a remote, `$ahead/behind[count]` will remain 0
   local r_count  # remote count
-  r_count="$( git rev-list --left-right --count HEAD...@{u} 2>/dev/null )" && {
+  r_count="$( $GIT rev-list --left-right --count HEAD...@{u} 2>/dev/null )" && {
     counts[ahead]="${r_count%$HT*}"
     counts[behnd]="${r_count#*$HT}"
   }
@@ -68,8 +72,8 @@ function prompt::git_extension() {
   # if the current branch doesn't have a name,
   #  use the branch's hex code instead
   local -r branch_name="$(
-    git symbolic-ref --short HEAD 2>/dev/null || \
-    git rev-parse    --short HEAD 2>/dev/null
+    $GIT symbolic-ref --short HEAD 2>/dev/null || \
+    $GIT rev-parse    --short HEAD 2>/dev/null
   )"
 
   # if we're on the main/master branch, use the pre-defined symbol (`𝛍`)
