@@ -1,6 +1,11 @@
 #!/usr/bin/env zsh
 
 function prompt::git_extension() {
+
+  # if there are any dataless files in this directory's `.git` folder, then
+  #  quit immediately
+  if [[ -n "$( find -Px "$PWD/.git" -type f -flags -dataless )" ]] return 0
+
   # the `--no-optional-locks` option prevents git from creating temporary files
   #  when geeting info, and therefore prevents the [amc] times from changing
   local -ra GIT=( git --no-optional-locks )
@@ -12,10 +17,8 @@ function prompt::git_extension() {
   #  or git has been disabled in settings
   if (( $? || !do_git )) || [[ "$grvp_output" == 'false' ]] return 0
 
-  # if it takes too long, then some of the git files are likely offloaded,
-  #  so don't bother trying to read them
   local git_status
-  git_status=$'\n'"$( timeout .1 $GIT status --porcelain )"
+  git_status=$'\n'"$( $GIT status --porcelain 2>/dev/null )"
   if (( $? )) return 0
 
   # —— Const & Var Setup ———————————————————————————————————————————— #
